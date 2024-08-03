@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stopwatch</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f077;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 30px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .timer-display {
+            font-size: 55px;
+            margin-bottom: 20px;
+            border-radius: 15px;
+            border-color: black;
+            align-items: center;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+        }
+        .buttons button {
+            padding: 10px 20px;
+            font-size: 16px;
+            border: black;
+            border-radius: 10px;
+            margin: 0 5px;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            
+            
+        }
+        .start { background: #64d668; color: white; }
+        .pause { background: #b7332a; color: white; }
+        .reset { background: #1871ba; color: white; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="timer-display">00:00:00:00</div>
+        <div class="buttons">
+            <button id="start" class="start">Start</button>
+            <button id="pause" class="pause">Pause</button>
+            <button id="reset" class="reset">Reset</button>
+        </div>
+    </div>
+
+    <script>
+        var ms = 0, s = 0, m = 0, h = 0;
+        var display = document.querySelector(".timer-display");
+        var interval;
+
+        document.getElementById("start").addEventListener("click", function() {
+            if (interval) clearInterval(interval);
+            interval = setInterval(updateTime, 10);
+        });
+
+        document.getElementById("pause").addEventListener("click", function() {
+            clearInterval(interval);
+        });
+
+        document.getElementById("reset").addEventListener("click", function() {
+            clearInterval(interval);
+            ms = s = m = h = 0;
+            updateDisplay();
+        });
+
+        function updateTime() {
+            ms += 10;
+            if (ms === 1000) {
+                ms = 0;
+                s++;
+                if (s === 60) {
+                    s = 0;
+                    m++;
+                    if (m === 60) {
+                        m = 0;
+                        h++;
+                    }
+                }
+            }
+            updateDisplay();
+        }
+
+        function updateDisplay() {
+            function format(num) {
+                return num < 10 ? "0" + num : num;
+            }
+            display.textContent = 
+                format(h) + ":" + 
+                format(m) + ":" + 
+                format(s) + ":" + 
+                format(Math.floor(ms / 10));
+        }
+    </script>
+</body>
+</html>
